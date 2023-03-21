@@ -2,6 +2,17 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## How to Install the Project
+
+Install node.js in the directory
+Install React and JavaScript dependencies
+Run "npm install" for any additional imports
+
+## How to Run the Project
+Go to the directory where the node_modules and other folders are at.
+Run "npm start"
+Open "localhost/3000" port
+
 ## Available Scripts
 
 In the project directory, you can run:
