@@ -11,6 +11,7 @@ import {ref, set, get, update, remove, child } from "firebase/database";
 import { getDatabase } from "firebase/database";
 
 // webcodedev YT tutorial
+// either as interests with an array of strings or just names, or a separate db table with customer id reference or foreign key 
 const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ const SignUp = () => {
     };
     return (
         <div style={{}}>
-                    <Card class="homePage"
+                    <Card className="homePage"
                     style={{
                         width: 400,
                         backgroundColor: '#ff6f61',

@@ -17,20 +17,19 @@ import { useEffect, useState } from "react";
 
 // firebase.database().ref('users/' + firebase.auth().currentUser.uid import database and then call it in this constructor
 //  const crud set state and return
-const Crud = () => {
-    const db = StartFirebase(); // after component starts, it mounts db
+const Crud = (user) => {
+ // after component starts, it mounts db
     const [fullName, setName] = useState("");
     const [dob, setDOB] = useState("");
     const [address, setAddress] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const auth = getAuth();
-    const user = auth.currentUser;
+    const [interests, setInterests] = useState("");
     const uuId = user.uid;
         return(
             <>
                 <div style={{}}>
-                    <Card class="homePage"
+                    <Card className="homePage"
                     style={{
                         width: 400,
                         backgroundColor: '#ff6f61',
@@ -72,8 +71,8 @@ const Crud = () => {
                                 <button id="deleteBtn" onClick={() => deleteData()}> Delete Data </button> 
                                 <button id="selectBtn" onClick={() => selectData()}> Get Data from DB </button>
                         </CardContent>
-                        <Link to="/SignUp2.0">
-                            <Button class="moreinfo" size="small" text-align="right">Continue</Button>
+                        <Link to="/interestpage">
+                            <Button className="moreinfo" size="small" text-align="right">Continue</Button>
                         </Link>
                     </Card>
                 </div>
@@ -89,19 +88,21 @@ const Crud = () => {
             address: address,
             email: user.email,
             password: password,
-            uuId: uuId
+            uuId: uuId,
+            interests: interests
         }
     }
 
     function insertData() { // set as a function
         const data = getAllInputs();
-        set(ref(db, 'Customer/'+data.fullName), {
+        set(ref(db, 'Customer/'+data.uuId), {
             fullName: data.fullName,
             dob: data.dob,
             address: data.address,
             email: data.email,
             password: data.password,
-            uuId: data.uuId
+            uuId: data.uuId,
+            interests: data.interests
         })
         .then(()=>{alert('data was added successfully')})
         .catch((error)=>{alert("there was an error, details:"+error)});
@@ -109,19 +110,20 @@ const Crud = () => {
 
     function updateData() {
         const data = getAllInputs();
-        set(ref(db, 'Customer/'+data.fullName), {
+        set(ref(db, 'Customer/'+data.uuId), {
             fullName: data.fullName,
             dob: data.dob,
             address: data.address,
             email: data.email,
             password: data.password,
-            uuId: data.uuId
+            uuId: data.uuId,
+            interests: data.interests
         })
         .then(()=>{alert('data was added successfully')})
         .catch((error)=>{alert("there was an error, details:"+error)});
     }
     function deleteData() {
-        const fullName = getAllInputs().fullName;
+        const fullName = getAllInputs().uuId; // snapshot it
 
         remove(ref(db, 'Customer/'+fullName))
         .then(()=>{alert('data was deleted successfully')})
@@ -129,17 +131,18 @@ const Crud = () => {
     }
     function selectData() {
         const dbref = ref(db);
-        const fullName = getAllInputs().fullName;
+        const fullName = getAllInputs().uuId;
 
-        get(child(dbref, 'Customer/'+fullName)).then((snapshot) =>{
-            if (snapshot.exists()) {
-                this.setState({
+        get(child(dbref, 'Customer/'+fullName)).then((snapshot) =>{ // saving it under and if you update via uuId and can segment the customers. Add it as another column in customer database or a separate database models specifically on interests
+            if (snapshot.exists()) { // A with similar interests with B 
+                this.setState({ // after set up the table and then seed it and see if they can interact (figure out liking or just the ability to message it)
                     fullName: snapshot.val().fullName,
                     dob: snapshot.val().dob,
                     address: snapshot.val().address,
                     email: snapshot.val().email,
                     password: snapshot.val().password,
-                    uuId: snapshot.val().uuId
+                    uuId: snapshot.val().uuId,
+                    interests: snapshot.val().interests
                 })
             }
             else {

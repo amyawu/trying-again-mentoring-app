@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 export default function HomePage() {
     return (
       <div style={{}}>
-        <Card class="homePage"
+        <Card className="homePage"
           style={{
             width: 400,
             backgroundColor: '#ff6f61',
@@ -36,16 +36,16 @@ export default function HomePage() {
               Adventure. Explore. Learn more.
             </Typography>
             <Typography variant="body2" component="p">
-                <Button class="about"size="small" text-align ="center">ABOUT</Button>
-                <Button class="faq" size="small" text-align ="center">FAQ</Button>
-                <Button class="contact" size="small" text-align ="center">CONTACT</Button>
+                <Button className="about"size="small" text-align ="center">ABOUT</Button>
+                <Button className="faq" size="small" text-align ="center">FAQ</Button>
+                <Button className="contact" size="small" text-align ="center">CONTACT</Button>
             </Typography>
           </CardContent>
           <Link to="/SignIn">
-                <Button class="moreinfo" size="small" text-align="right">Sign In</Button>
+                <Button className="moreinfo" size="small" text-align="right">Sign In</Button>
             </Link>
             <Link to="/SignUp">
-                <Button class="moreinfo" size="small" text-align="right">Sign Up!</Button>
+                <Button className="moreinfo" size="small" text-align="right">Sign Up!</Button>
             </Link>
         </Card>
       </div>
