@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './index.css';
 import StartFirebase from "../firebaseConfig";
 import {ref, set, get, update, remove, child } from "firebase/database";
 import { auth, firebaseConfig } from "../../firebase";
@@ -14,66 +15,78 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { db } from "../../firebase";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react";
+import image from "./img/bricks.png"; 
+import gif from "./img/FinishReg.gif";
 
 // firebase.database().ref('users/' + firebase.auth().currentUser.uid import database and then call it in this constructor
 //  const crud set state and return
-const Crud = (user) => {
+const RegistrationCreation = ( {user, db, input, inputHandler} ) => { // USER IS ACTUALLY UID
+
  // after component starts, it mounts db
+ 
+const auth = getAuth();
+
     const [fullName, setName] = useState("");
     const [dob, setDOB] = useState("");
     const [address, setAddress] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [interests, setInterests] = useState("");
-    const uuId = user.uid;
+    const [mentorOption, setMentorOption] = useState("");
+    const uuId = user;
+    console.log("current user", auth.currentUser)
         return(
             <>
-                <div style={{}}>
-                    <Card className="homePage"
-                    style={{
-                        width: 400,
-                        backgroundColor: '#ff6f61',
-                    }}
+                        <div style={{ backgroundImage:`url(${image})`, backgroundSize:"contain", height: window.innerHeight,
+        width: window.innerWidth, display:'flex', justifyContent:'center'}}>
+                    <Card class="box box2"
+          style={{
+            width: 400,
+            height: 400,
+            marginTop: 200, 
+            marginBottom: 200
+            
+          }}
                     >
-                        <CardContent>
-                            <Typography
-                            style={{ fontSize: 14 }}
-                            color="textSecondary"
-                            gutterBottom
-                            >
-                            Mentoring App
-                            </Typography>
-                            <Typography variant="h5" component="h2">
-                            MentorMee
-                            </Typography>
-                            <Typography
-                            style={{
-                                marginBottom: 12,
-                            }}
-                            color="textSecondary"
-                            >
-                            Adventure. Explore. Learn more.
-                            </Typography>
-                                <label> Enter your full name </label>
-                                <input type='text' id="namebox" value={fullName}
+                        <CardContent >
+                        <img style={{
+                            justifyContent:'center'
+                        }}src={gif} alt="gif" />
+                         <Typography
+                style={{ fontSize: 14, color: '#ff073a' }}
+                color="textSecondary"
+                gutterBottom
+                >
+                                <label style={{ fontSize: 20, color: '#ffffff' }}> Enter your full name </label>
+                                <input  type='text' id="namebox" value={fullName}
                                 onChange={e =>{setName(e.target.value);}} />
                                 <br></br>
-                                <label> Enter your dob </label>
+                                <label style={{ fontSize: 20, color: '#ffffff' }}> Enter your dob </label>
                                 <input type='date' id="dobbox" value={dob}
                                 onChange={e =>{setDOB(e.target.value);}} />
                                 <br></br>
-                                <label> Enter your address </label>
+                                <label style={{ fontSize: 20, color: '#ffffff' }}> Enter your address </label>
                                 <input type='text' id="addressbox" value={address}
                                 onChange={e =>{setAddress(e.target.value);}} />
                                 <br></br>
-                                <button id="addBtn" onClick={() => insertData()}> Add Data </button>
-                                <button id="updateBtn" onClick={() => updateData()}> Update Data </button>
-                                <button id="deleteBtn" onClick={() => deleteData()}> Delete Data </button> 
-                                <button id="selectBtn" onClick={() => selectData()}> Get Data from DB </button>
+                                </Typography>
+                                <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}id="addBtn" onClick={() => insertData()}> Register </button>
+                                <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}id="updateBtn" onClick={() => updateData()}> Edit Profile </button>
+                                <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}id="deleteBtn" onClick={() => deleteData()}> Delete Account </button> 
+                                <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}id="selectBtn" onClick={() => selectData()}> Autofill </button>
                         </CardContent>
-                        <Link to="/interestpage">
-                            <Button className="moreinfo" size="small" text-align="right">Continue</Button>
-                        </Link>
                     </Card>
                 </div>
             </>
@@ -86,15 +99,17 @@ const Crud = (user) => {
             fullName: fullName,
             dob: dob,
             address: address,
-            email: user.email,
+            email: auth.currentUser.email,
             password: password,
             uuId: uuId,
-            interests: interests
+            interests: interests,
+            mentorOption: mentorOption
         }
     }
 
     function insertData() { // set as a function
         const data = getAllInputs();
+        console.log(user.email)
         set(ref(db, 'Customer/'+data.uuId), {
             fullName: data.fullName,
             dob: data.dob,
@@ -102,7 +117,8 @@ const Crud = (user) => {
             email: data.email,
             password: data.password,
             uuId: data.uuId,
-            interests: data.interests
+            interests: data.interests,
+            mentorOption: data.mentorOption
         })
         .then(()=>{alert('data was added successfully')})
         .catch((error)=>{alert("there was an error, details:"+error)});
@@ -117,7 +133,8 @@ const Crud = (user) => {
             email: data.email,
             password: data.password,
             uuId: data.uuId,
-            interests: data.interests
+            interests: data.interests,
+            mentorOption: data.mentorOption
         })
         .then(()=>{alert('data was added successfully')})
         .catch((error)=>{alert("there was an error, details:"+error)});
@@ -142,7 +159,8 @@ const Crud = (user) => {
                     email: snapshot.val().email,
                     password: snapshot.val().password,
                     uuId: snapshot.val().uuId,
-                    interests: snapshot.val().interests
+                    interests: snapshot.val().interests,
+                    mentorOption: snapshot.val().mentorOption
                 })
             }
             else {
@@ -153,4 +171,4 @@ const Crud = (user) => {
     }
 }
 
-export default Crud
+export default RegistrationCreation

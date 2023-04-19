@@ -8,7 +8,6 @@ import SignUp from './components/auth/SignUp';
 import TestingPage from './TestingPage';
 import HomePage from './HomePage';
 import ProfilePage from './ProfilePage';
-import Crud from './components/crud';
 //import SignUpPage from './SignInPage';
 import AuthDetails from './components/AuthDetails';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -18,14 +17,22 @@ import SignInAndOutIcons from './components/SignInAndOutIcons';
 import StartFirebase from './components/firebaseConfig';
 import { getAuth } from "firebase/auth";
 import { useState } from 'react';
-
+import RegistrationCreation from './components/crud';
+import MatchingPage from './MatchingPage';
+import React from 'react';
+ // route at the top and 
 function App() {
   const db = StartFirebase();
   const [user, setUser] = useState(null);
-
+  const [input, setInput] = React.useState("Save Edits");
+  const inputHandler = e => {
+    setInput(e.target.value);
+  };
   function setAuthenticatedUser(data) {
     setUser(data)
   }
+  
+  console.log("insideApp", user&&user.uid);
   return (
     <Router>
       <div className="App">
@@ -34,20 +41,26 @@ function App() {
             <>
               <HomePage />
             </>}></Route>
-            <Route exact path="/SignUp2.0" element={<> 
-              <Crud user={user}/>
+            <Route exact path="/Matching" element={
+            <>
+            <AuthDetails setUser={setAuthenticatedUser}/> 
+              {user&&<MatchingPage user={user.uid} db={db} input={input} inputHandler={inputHandler}/>}
             </>}></Route>
-            <Route exact path="/InterestPage" element={<> 
-              <ProfilePage user={user}/>
-              <SignInAndOutIcons />
+
+            <Route exact path="/SignUp2.0" element={<> 
+              <AuthDetails setUser={setAuthenticatedUser}/>
+              {user&&<RegistrationCreation user={user.uid} db={db} input={input} inputHandler={inputHandler}/>}
+            </>}></Route>
+            <Route exact path="/InterestsPage" element={<> 
+              <AuthDetails setUser={setAuthenticatedUser}/> 
+              {user&&<ProfilePage user={user.uid} db={db} input={input} inputHandler={inputHandler}/>}
             </>}></Route>
             <Route exact path="/AccountPage" element={
             <>
-              <AccountPage user={user}/>
-              <SignInAndOutIcons />
+                 <AuthDetails setUser={setAuthenticatedUser}/>
+              {user&&<AccountPage user={user.uid} db={db} input={input} inputHandler={inputHandler}/>}
             </>}></Route>
-          <Route exact path="/TestingPage" element={<TestingPage />}></Route>
-          <Route exact path="/HomePage" element={<HomePage />}></Route>
+          {/* <Route exact path="/TestingPage" element={<TestingPage />}></Route> */}
           <Route exact path="/SignIn" element={
             <> 
               <SignIn />

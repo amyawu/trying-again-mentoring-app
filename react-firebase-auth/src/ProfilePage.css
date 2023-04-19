@@ -1,0 +1,14 @@
+.box2 {
+    background-color: rgba(0,0,0,.3);
+    margin: '5%';
+    width: "90%";
+    min-width: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+  }
+  .h4 {
+    color: '#ffffff'
+  }

@@ -6,46 +6,80 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import CardActions from "@material-ui/core/CardActions";
 import { Link } from 'react-router-dom';
+import image from "./img/bricks.png"; 
+import gif from "./img/download.gif";
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Text,
+  Alert,
+} from 'react-native';
+// const Separator = () => <View style={styles.separator} />;
 
-export default function HomePage() {
+export default function HomePage(props) {
+  const [input, setInput] = React.useState("Save Edits");
+  const inputHandler = e => {
+    setInput(e.target.value);
+  };
     return (
-      <div style={{}}>
-        <Card className="homePage"
+
+      <div style={{ backgroundImage:`url(${image})`, backgroundSize:"contain", height: window.innerHeight,
+      width: window.innerWidth, display:'flex', justifyContent:'center'}}>
+        <Card class="box box2"
           style={{
             width: 400,
-            backgroundColor: '#ff6f61',
+            height: 400,
+            marginTop: 200, 
+            marginBottom: 200
           }}
         >
           <CardContent>
             <Typography
-              style={{ fontSize: 14 }}
+              style={{ fontSize: 14, color: '#ff073a'}}
               color="textSecondary"
               gutterBottom
             >
               Mentoring App
             </Typography>
-            <Typography variant="h5" component="h2">
-              Mentoree Jamboree
-            </Typography>
+            <img src={gif} alt="gif" />
             <Typography
               style={{
                 marginBottom: 12,
+                color: '#ff073a'
               }}
               color="textSecondary"
             >
               Adventure. Explore. Learn more.
             </Typography>
             <Typography variant="body2" component="p">
-                <Button className="about"size="small" text-align ="center">ABOUT</Button>
-                <Button className="faq" size="small" text-align ="center">FAQ</Button>
-                <Button className="contact" size="small" text-align ="center">CONTACT</Button>
+
+                <Button  style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}>ABOUT</Button>
+                <Button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}>FAQ</Button>
+                <Button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}>CONTACT</Button>
+
             </Typography>
           </CardContent>
           <Link to="/SignIn">
-                <Button className="moreinfo" size="small" text-align="right">Sign In</Button>
+          <Button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}>Sign In</Button>
             </Link>
             <Link to="/SignUp">
-                <Button className="moreinfo" size="small" text-align="right">Sign Up!</Button>
+            <Button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}>Sign Up</Button>
             </Link>
         </Card>
       </div>

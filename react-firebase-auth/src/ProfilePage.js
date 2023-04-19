@@ -9,12 +9,17 @@ import { getAuth } from "firebase/auth";
 import { Link } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useEffect } from "react";
+import image from "./img/bricks.png"; 
+import gif from "./img/Change.gif";
 
-const ProfilePage = (user) => {
+const ProfilePage = ({user, db, input, inputHandler} ) => {
+  
+const auth = getAuth();
+
   const [interests, setInterests] = useState("");
-  const uuId = user.uid;
-  console.log("profilePage",user);
-  const [authUser, setAuthUser] = useState(null);
+  const [mentorOption, setMentorOption] = useState("");
+  const uuId = user;
+  console.log("profilePage",auth.currentUser);
 
 
     const [userinfo, setUserInfo] = useState({
@@ -49,53 +54,65 @@ const ProfilePage = (user) => {
     return (
       
         <>
-            <div style={{}}>
-                    <Card className="homePage"
-                    style={{
-                        width: 400,
-                        backgroundColor: '#ff6f61',
-                    }}
-                    >
+                    <div style={{ backgroundImage:`url(${image})`, backgroundSize:"contain", height: window.innerHeight,
+        width: window.innerWidth, display:'flex', justifyContent:'center'}}>
+                    <Card class="box box2"
+            style={{
+              width: 400,
+              height: 400,
+              marginTop: 200, 
+              marginBottom: 200
+            }}
+          >
                         <CardContent>
-                            <Typography
-                            style={{ fontSize: 14 }}
-                            color="textSecondary"
-                            gutterBottom
-                            >
-                            Mentoring App
-                            </Typography>
-                            <Typography variant="h5" component="h2">
-                            Mentoree Jamboree
-                            </Typography>
-                            <Typography
-                            style={{
-                                marginBottom: 12,
-                            }}
-                            color="textSecondary"
-                            >
-                            Adventure. Explore. Learn more.
-                            </Typography>
+                        <img style={{
+                            justifyContent:'center'
+                        }}src={gif} alt="gif" />
+                        <Typography
+                style={{ fontSize: 14, color: '#ff073a' }}
+                color="textSecondary"
+                gutterBottom
+                >
+                            <h4 style={{color: '#ffffff' }} htmlFor="exampleFormControlTextarea1">
+                  I want to be a:
+                  </h4>
+                  <input type='text' id="mentoroptionbox" value={mentorOption}
+                                onChange={e =>{setMentorOption(e.target.value);}} />
+                  <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}id="updateBtn" onClick={() => updateData()}> Confirm if you're a mentor or mentee </button>
 
-                  <label htmlFor="exampleFormControlTextarea1">
-                    Please write to confirm your interests:
-                  </label>
+                  <h4 style={{color: '#ffffff' }} htmlFor="exampleFormControlTextarea1">
+                    for the following interest(s):
+                  </h4>
                   <input type='text' id="interestsbox" value={interests}
                                 onChange={e =>{setInterests(e.target.value);}} />
-                  <button id="updateBtn" onClick={() => updateData()}> Update Data </button>
-                  <Link to="/SignIn">
-                <button type="submit">Go Back to Profile</button>
-                </Link>
+                  
+                  <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}id="updateBtn" onClick={() => updateData()}> Confirm your interests </button>
+                  </Typography>
               
           
                         </CardContent>
+                        <Link to="/SignIn">
+                <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}type="submit">Go Back to Profile</button>
+                </Link>
                     </Card>
+                    
                 </div>
         </>
         
       )      
       function getAllInputs() {
         return {
-          interests: interests
+          interests: interests,
+          mentorOption: mentorOption
       }
     }
     // go import in the authdetails into diff pages but don't need to copy and paste code since it's already encapsulated and can render
@@ -103,11 +120,12 @@ const ProfilePage = (user) => {
     function updateData() {
       const data = getAllInputs();
       //console.log("data", authUser.uid)
-      // set(ref(db, 'Interests/'+ authUser.uid), {
-      //     interests: data.interests
-      // })
-      // .then(()=>{alert('data was added successfully')})
-      // .catch((error)=>{alert("there was an error, details:"+error)});
+      set(ref(db, 'Interests/'+ user), {
+          interests: data.interests,
+          mentorOption: data.mentorOption
+      })
+      .then(()=>{alert('data was added successfully')})
+      .catch((error)=>{alert("there was an error, details:"+error)});
     
   }
     }

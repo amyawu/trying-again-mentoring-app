@@ -1,5 +1,6 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import React, { useEffect, useState } from 'react';
+import './AuthDetails.css';
 import { auth } from '../firebase';
 import { Link } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
@@ -7,8 +8,15 @@ import { getDatabase, ref, set } from "firebase/database";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-
+import image from "./img/bricks.png"; 
+import gif from "./img/download.gif";
+// figure out how to not constantly have auithdetails everywhere and wrap user data wioth authentication in app to fix that 
+// separate the navbar details from authdetails
 const AuthDetails = (props) => {
+    const [input, setInput] = React.useState("Save Edits");
+    const inputHanlder = e => {
+      setInput(e.target.value);
+    };
     const [authUser, setAuthUser] = useState(null);
     useEffect(() => {
         const listen = onAuthStateChanged(auth, (user) => {
@@ -30,47 +38,84 @@ const AuthDetails = (props) => {
             }).catch(error => console.log(error))
         }
     return (
-        <div style={{}}>
-        <Card className ="homePage"
-        style={{
-            width: 400,
-            backgroundColor: '#ff6f61',
-        }}
-        >
+        <div style={{ backgroundImage:`url(${image})`, backgroundSize:"contain", height: window.innerHeight,
+        width: window.innerWidth, display:'flex', justifyContent:'center'}}>
+          <Card class="box box2"
+            style={{
+              width: 400,
+              height: 400,
+              marginTop: 200, 
+              marginBottom: 200
+            }}
+          >
             <CardContent>
                 <Typography
-                style={{ fontSize: 14 }}
+                style={{ fontSize: 14, color: '#ff073a' }}
                 color="textSecondary"
                 gutterBottom
                 >
                 Mentoring App
                 </Typography>
-                <Typography variant="h5" component="h2">
-                Mentoree Jamboree
-                </Typography>
+                <img src={gif} alt="gif" />
                 <Typography
                 style={{
                     marginBottom: 12,
-                }}
+                    color: '#ff073a'
+                  }}
                 color="textSecondary"
                 >
                 Adventure. Explore. Learn more.
                 </Typography>
-<div className="sign-up-container">
-            {authUser ? <><p>Signed In as {authUser.email}</p>
+<div className="sign-up-container" color="white">
+            {authUser ? <><p
+            style={{
+                color: '#ffffff'
+              }}
+            >Signed In as {authUser.email}</p>
             <Link to="/AccountPage">
-            <button type="submit">Account Profile</button>
+            <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}type="submit">Account Profile</button>
             </Link>
-            <Link to="/InterestPage">
-            <button type="submit">Change your Interests</button>
+            <Link to="/SignUp2.0">
+            <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}type="submit">Finish Registration</button>
             </Link>
-            <button onClick={userSignOut}> Sign Out </button></>
-            : <><p> You're not signed in. </p> 
+            <Link to="/InterestsPage">
+            <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}type="submit">Change your Interests</button>
+            </Link>
+            {/* <Link to="/Matching">
+            <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}type="submit">Find your mentor/mentee</button>
+            </Link> */}
+            <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}onClick={userSignOut}> Sign Out </button></>
+            : <><p
+            style={{
+                color: '#ffffff'
+              }}
+            > You're not signed in. </p> 
             <Link to="/">
-            <button type="submit">Go back to Home</button>
+            <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}type="submit">Go back to Home</button>
             </Link>
             <Link to="/SignIn">
-            <button type="submit">Sign In</button>
+            <button style={{
+          backgroundColor: input === "Save Edits" ? "#000000" : "#222222",
+          color: "#6ad0d4"
+        }}type="submit">Sign In</button>
             </Link></>}
             </div>
         </CardContent>
